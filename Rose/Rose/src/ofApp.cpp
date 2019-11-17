@@ -3,55 +3,85 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
-	a = 0;
-	
-	numerator = 8;
-	denominator = 5;
+	ofBackground(0);
+	translate = 400;
 
-	offsetX = 50;
-	offsetY = 50;
+	numerator = 5;
+	denominator = 49;
 
-	change = 50;
+	ReduceFraction(numerator, denominator);
+	NumOfCycles(numerator, denominator, cycles);
+
+	n = 0;
+	g = 0;
+	k = (float)numerator / (float)denominator;
+	change = 0;
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
 
-	a < (TWO_PI * denominator) ? a += 0.1 : a = 0;
-
-	if (a == 0) {
-		change += 50;
-		offsetX += 200;
-		offsetY += 200;
+	if (g < (PI * cycles)) {
+		n += 0.1;
+		g += 0.1;
+	}
+	else {
+		vectors.clear();
+		change = 0;
+		n = 0;
+		g = 0;
 	}
 
-	k = numerator / denominator;
+	vector<float> coordinates = rose();
 
-	r = 200 * cos(k * a);
-	x = r * cos(a);
-	y = r * sin(a);
+	glm::vec3 vector = glm::vec3(coordinates[0] + translate, coordinates[1] + translate, 0);
 
+	vectors.push_back(vector);
 
+	line.clear();
+	line.addVertices(vectors);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 
 	ofSetColor(255, 0, 0);
-	ofVec3f vector = ofVec3f(x, y, 0);
 
-	//vector.x += (ofGetWidth() / 2);
-	//vector.y += (ofGetHeight() / 2);
-
-	vector.x += offsetX;
-	vector.y += offsetY;
-
-	line.addVertex(vector);
-
-	ofBackground(0);
 	ofSetLineWidth(2.0);
-	ofSetColor(change, 100, 0);
+	ofSetColor(255, 100, 0);
+
 	line.draw();
+}
+
+void ofApp::ReduceFraction(int &numerator, int &denominator)
+{
+	for (int i = denominator * numerator; i > 1; i--) {
+		if ((denominator % i == 0) && (numerator % i == 0)) {
+			denominator /= i;
+			numerator /= i;
+		}
+	}
+}
+
+void ofApp::NumOfCycles(int &numerator, int &denominator, int &cycles)
+{
+	if (numerator == denominator) {
+		cycles = 1;
+	}
+	else if (denominator % 2 != 0 && numerator % 2 != 0) {
+		cycles = denominator;
+	}
+	else {
+		cycles = (denominator * 2);
+	}
+}
+
+vector<float> ofApp::rose() {
+	r = 200 * cos(k * n);
+	x = r * cos(n);
+	y = r * sin(n);
+
+	return vector<float>{ x, y };
 }
 
 //--------------------------------------------------------------

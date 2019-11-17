@@ -9,21 +9,28 @@ class ofApp : public ofBaseApp{
 		void update();
 		void draw();
 
-		float numerator;
-		float denominator;
-
+		int test;
 		int change;
+		int numerator;
+		int denominator;
+		int cycles;
 
-		float offsetX;
-		float offsetY;
+		float translate;
 
-		float a;
 		float k;
 		float r;
 		float x;
 		float y;
+		float n;
+		float g;
+		float d;
 
 		ofPolyline line;
+		vector<glm::vec3> vectors;
+
+		void ReduceFraction(int &numerator, int &denominator);
+		void NumOfCycles(int &numerator, int &denominator, int &cycles);
+		vector<float> rose();
 
 		void keyPressed(int key);
 		void keyReleased(int key);
